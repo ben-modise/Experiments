@@ -10,6 +10,7 @@ function [x_s, k, fevals, normJ] = adf_mDFP(J, x_prev, x0, ~)
 % method and its iteration-complexity analysis."
 %  
 % Lui, Li, Shao, and Wu (2025)
+% DOI 10.1007/s10915-025-03071-0
 %==========================================================================
 
 %% ------------- Initialize parameters---------------------------------
