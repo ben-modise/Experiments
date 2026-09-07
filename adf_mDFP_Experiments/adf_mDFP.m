@@ -1,4 +1,4 @@
-function [x_s, k, fevals, normJ] = adf_mDFP(J, x_prev, x0, ~)
+function [x_s, k, fevals, normJ, iflag] = adf_mDFP(J, x_prev, x0, ~)
 %=========================================================================
 % adf_mDFP
 %
@@ -11,6 +11,14 @@ function [x_s, k, fevals, normJ] = adf_mDFP(J, x_prev, x0, ~)
 %  
 % Lui, Li, Shao, and Wu (2025)
 % DOI 10.1007/s10915-025-03071-0
+
+%   Output: x_s     = solution
+%           k       = iteration history
+%           fevals  = number of function evaluations
+%           normJ   = norm of objective function value
+%           iflag   = 0 algorithm successful
+%                   = 1 steplength unsuccessful
+%                   = 2 norm(Fk) > tol && iter > maxit
 %==========================================================================
 
 %% ------------- Initialize parameters---------------------------------
@@ -22,6 +30,8 @@ tol1 = 1e-7; % for checking against norm(dk)
 tol2 = 1e-6; % for checking against norm(Jk)
 maxit = 10000; %; % maximum number of iterations
 maxLineSearchTrials = 10000;
+
+iflag = 0;
 
 
 
@@ -52,6 +62,7 @@ maxLineSearchTrials = 10000;
             lineSearchtrials = lineSearchtrials +1;
             if lineSearchtrials >= maxLineSearchTrials
                 disp('line search trials exceeded')
+                iflag = 1;
                 break
             end
         end
@@ -160,7 +171,10 @@ end
 if k==maxit
     normJ = norm(Jomega);
     x_s = omega;
-    disp('maximum iterations reached')
+    if normJ > tol2
+        iflag = 2;
+    end
+    %disp('maximum iterations reached')
 end
 
 end

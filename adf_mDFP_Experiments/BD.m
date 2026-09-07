@@ -31,7 +31,7 @@ if nargin < 3
 elseif isempty(P)
     P = @constantfunction;
 end
-keyboard;
+%keyboard;
 if nargin >= 4 && ~isempty(P_options)
     P = @(x)P(x,P_options);
 end
