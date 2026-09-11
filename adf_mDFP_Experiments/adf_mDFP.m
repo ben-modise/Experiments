@@ -1,4 +1,4 @@
-function [x_s, k, fevals, normJ, iflag] = adf_mDFP(J, x_prev, x0, ~)
+function [x_s, k, fevals, normJ, iflag] = adf_mDFP(J, x0, x_prev, ~)
 %=========================================================================
 % adf_mDFP
 %
@@ -69,7 +69,7 @@ iflag = 0;
     end
 
     function dk = computeDirection()        
-        if k>=0
+        if k==0 % 
             dk = -Jomega;
             return
         end
@@ -103,6 +103,15 @@ iflag = 0;
 xk = x0;
 fevals = 0;
 for k = 0:maxit
+    % Update iteration history
+    % k = k + 1; % Increment iteration count
+    % Store current solution and function value
+    % history(k, :) = [xk', norm(Jomega)];
+    % if k == 3
+    %     keyboard;
+    % end
+
+
     % ------------------------------------------------
     % Step 1: Inertial extrapolation       (Eq 14)
     % ------------------------------------------------
@@ -171,7 +180,7 @@ end
 if k==maxit
     normJ = norm(Jomega);
     x_s = omega;
-    if normJ > tol2
+    if normJ < tol2 || isnan(normJ)
         iflag = 2;
     end
     %disp('maximum iterations reached')
