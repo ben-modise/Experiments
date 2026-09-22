@@ -2,3 +2,4 @@
 *.asv
 # MATLAB backup files
 *.m~
+*.txt
